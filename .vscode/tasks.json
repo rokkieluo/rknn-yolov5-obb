@@ -1,0 +1,83 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		// 1.cmake配置
+		{
+			"type": "cppbuild",
+			"label": "CMake配置",
+			"command": "cmake", // cmake命令
+			"args": [
+					"-S .", // 源码目录
+					"-B build", // 编译目录
+					"-DCMAKE_BUILD_TYPE=Debug" // 编译类型
+			],
+			"options": {
+					"cwd": "${workspaceFolder}" // 工作目录
+			},
+			"problemMatcher": [
+					"$gcc"
+			],
+			"group": "build",
+		},
+		// 2.cmake编译
+		{
+			"type": "cppbuild",
+			"label": "CMake编译",
+			"command": "cmake", // cmake命令
+			"args": [
+					"--build", // 编译
+					"build", // 编译目录
+			],
+			"options": {
+					"cwd": "${workspaceFolder}" // 工作目录
+			},
+			"problemMatcher": [
+					"$gcc"
+			],
+			"group": "build",
+			"dependsOn": [
+					"CMake配置" // 依赖CMake配置，先执行CMake配置
+			]
+		},
+		// 3.删除build目录
+		{
+			"type": "shell",
+			"label": "删除build目录",
+			"command": "rm -rf build",
+			"options": {
+					"cwd": "${workspaceFolder}" // 工作目录
+			},
+			"problemMatcher": [
+					"$gcc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		// 4.运行可执行程序
+		{
+			"type": "shell",
+			"label": "运行",
+			"command": "./build/yolov5_img", // 编译目录下的yolo11_thread_pool
+			"args": [
+				"./weights/EWB_v5_obb_v2.rknn",
+				"./medias/test_img.jpg"
+			],
+			"options": {
+					"cwd": "${workspaceFolder}" // 工作目录
+			},
+			"problemMatcher": [
+					"$gcc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"dependsOn":[
+				"CMake编译"
+			]
+		}
+
+	]
+}
